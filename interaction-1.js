@@ -55,21 +55,20 @@ function accelerationChange(accx, accy, accz) {
     // playAudio()
 }
 
-function rotationChange(rotx, roty, rotz) {
-const scale = (fromRange, toRange) => {
-  const d = (toRange[1] - toRange[0]) / (fromRange[1] - fromRange[0]);
-  return from => (from - fromRange[0]) * d + toRange[0];
+const scale = (number, [inMin, inMax], [outMin, outMax]) => {
+    // if you need an integer value use Math.floor or Math.ceil here
+    return (number - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
 };
 
 // angle 0-90  ->  position 1-0.5
-const angleToPosition = scale([0, 90], [1, 0.5]);
+const angleToPosition = angle => scale(angle, [0, 90], [1, 0.5]);
 
 function rotationChange(rotx, roty, rotz) {
   const angle = Math.max(0, Math.min(90, roty));   // keep the angle inside 0-90
-  faustNode.setParamValue("/door/position", angleToPosition(angle));
+    playAudio(angleToPosition(angle));
    
 }
-}
+
 
 function mousePressed() {
     playAudio()
@@ -119,7 +118,7 @@ function playAudio(doorposition) {
     // them printed on the console of your browser when you load the page)
     // For example if you change to a bell sound, here you could use "/churchBell/gate" instead of
     // "/thunder/rumble".
-    dspNode.setParamValue("/door/door/position", doorposition)
+    dspNode.setParamValue("/door/position", doorposition);
 
 }
 
