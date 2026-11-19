@@ -12,7 +12,7 @@ let dspNodeParams = null;
 let jsonParams = null;
 
 // Change here to ("tuono") depending on your wasm file name
-const dspName = "bells";
+const dspName = "door";
 const instance = new FaustWasm2ScriptProcessor(dspName);
 
 // output to window or npm package module
@@ -25,7 +25,7 @@ if (typeof module === "undefined") {
 }
 
 // The name should be the same as the WASM file, so change tuono with brass if you use brass.wasm
-bells.createDSP(audioContext, 1024)
+door.createDSP(audioContext, 1024)
     .then(node => {
         dspNode = node;
         dspNode.connect(audioContext.destination);
@@ -56,14 +56,19 @@ function accelerationChange(accx, accy, accz) {
 }
 
 function rotationChange(rotx, roty, rotz) {
-    doorAngle += roty * dt;
-  doorAngle = Math.max(0, Math.min(90, doorAngle));
-  if (!doorOpen && doorAngle > 20) {
-    doorOpen = true;
-    playAudio();
-  } else if (doorOpen && doorAngle < 10) {
-    doorOpen = false;
-  }
+const scale = (fromRange, toRange) => {
+  const d = (toRange[1] - toRange[0]) / (fromRange[1] - fromRange[0]);
+  return from => (from - fromRange[0]) * d + toRange[0];
+};
+
+// angle 0-90  ->  position 1-0.5
+const angleToPosition = scale([0, 90], [1, 0.5]);
+
+function rotationChange(rotx, roty, rotz) {
+  const angle = Math.max(0, Math.min(90, roty));   // keep the angle inside 0-90
+  faustNode.setParamValue("/door/position", angleToPosition(angle));
+   
+}
 }
 
 function mousePressed() {
@@ -103,7 +108,7 @@ function getMinMaxParam(address) {
 //
 //==========================================================================================
 
-function playAudio() {
+function playAudio(doorposition) {
     if (!dspNode) {
         return;
     }
@@ -114,8 +119,8 @@ function playAudio() {
     // them printed on the console of your browser when you load the page)
     // For example if you change to a bell sound, here you could use "/churchBell/gate" instead of
     // "/thunder/rumble".
-    dspNode.setParamValue("/englishBell/gate", 1)
-    setTimeout(() => { dspNode.setParamValue("/englishBell/gate", 0) }, 100);
+    dspNode.setParamValue("/door/door/position", doorposition)
+
 }
 
 //==========================================================================================
