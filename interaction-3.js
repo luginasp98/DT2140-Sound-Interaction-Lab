@@ -54,8 +54,16 @@ marimbaMIDI.createDSP(audioContext, 1024)
 function accelerationChange(accx, accy, accz) {
     // playAudio()
 }
+const scaleValue = (number, inMin, inMax, outMin, outMax) => {
+    // if you need an integer value use Math.floor or Math.ceil here
+    return (number - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
+};
+const angleToPosition = angle => scaleValue(angle, 0, 90, 0, 4);
 
 function rotationChange(rotx, roty, rotz) {
+  const pos = scaleValue(abs(rotx), 0, 90, 0, 4);   // keep the angle inside 0-90
+    playAudio(pos); 
+    //dspNode.setParamValue("/door/door/position", doorposition); 
 }
 
 function mousePressed() {
