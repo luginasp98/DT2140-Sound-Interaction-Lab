@@ -55,7 +55,7 @@ function accelerationChange(accx, accy, accz) {
     // playAudio()
 }
 
-const scale = (number, [inMin, inMax], [outMin, outMax]) => {
+const scale = (number, inMin, inMax, outMin, outMax) => {
     // if you need an integer value use Math.floor or Math.ceil here
     return (number - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
 };
@@ -64,9 +64,9 @@ const scale = (number, [inMin, inMax], [outMin, outMax]) => {
 const angleToPosition = angle => scale(angle, [0, 90], [0, 0.5]);
 
 function rotationChange(rotx, roty, rotz) {
-  const pos = scale(roty, [0, 90], [0, 0.5]);   // keep the angle inside 0-90
-    playAudio(pos);
-   
+  const pos = scale(roty, 0, 90, 0, 0.5);   // keep the angle inside 0-90
+    playAudio(pos); 
+    dspNode.setParamValue("/door/position", doorposition); 
 }
 
 
