@@ -61,7 +61,7 @@ const scale = (number, [inMin, inMax], [outMin, outMax]) => {
 };
 
 // angle 0-90  ->  position 1-0.5
-const angleToPosition = angle => scale(angle, [0, 90], [1, 0.5]);
+const angleToPosition = angle => scale(angle, [0, 90], [0, 0.5]);
 
 function rotationChange(rotx, roty, rotz) {
   const pos = scale(roty, [0, 90], [0, 0.5]);   // keep the angle inside 0-90
