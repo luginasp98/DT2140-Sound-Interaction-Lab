@@ -95,7 +95,7 @@ function getMinMaxParam(address) {
 //
 //==========================================================================================
 
-function playAudio(pressure) {
+function playAudio(largemovement) {
     if (!dspNode) {
         return;
     }
@@ -103,7 +103,7 @@ function playAudio(pressure) {
         return;
     }
     console.log(pressure)
-    dspNode.setParamValue("/brass/blower/pressure", pressure)
+    dspNode.setParamValue("/marimba/otherParams/strikePosition", largemovement)
 }
 
 //==========================================================================================
