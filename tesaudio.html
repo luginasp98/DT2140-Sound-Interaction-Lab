@@ -1,0 +1,32 @@
+//test file
+<!DOCTYPE html>
+<html>
+<body>
+  <button id="start">Start</button>
+  <button id="stop">Stop</button>
+  <p>Slide to adjust:</p>
+  <input id="notes" type="range" min="200" max="1000" value="440">
+
+  <script>
+    let ctx, osc, gain;
+
+    document.getElementById("start").onclick = () => {
+      ctx = new AudioContext();
+      osc = ctx.createOscillator();   // pembuat nada
+      gain = ctx.createGain();        // kontrol volume
+      gain.gain.value = 0.1;          // pelan, supaya aman di headphone
+      osc.connect(gain);              // oscillator -> gain
+      gain.connect(ctx.destination);  // gain -> speaker
+      osc.start();
+    };
+
+    document.getElementById("stop").onclick = () => {
+      osc.stop();
+    };
+
+    document.getElementById("notes").oninput = (e) => {
+      osc.frequency.value = e.target.value;
+    };
+  </script>
+</body>
+</html>
