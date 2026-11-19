@@ -51,11 +51,19 @@ bells.createDSP(audioContext, 1024)
 //
 //==========================================================================================
 
-function accelerationChange(accx, accy, accz) {
+function accelerationChange(accx, accy, accz) {    
     // playAudio()
 }
 
 function rotationChange(rotx, roty, rotz) {
+    doorAngle += roty * dt;
+  doorAngle = Math.max(0, Math.min(90, doorAngle));
+  if (!doorOpen && doorAngle > 20) {
+    doorOpen = true;
+    playAudio();
+  } else if (doorOpen && doorAngle < 10) {
+    doorOpen = false;
+  }
 }
 
 function mousePressed() {
