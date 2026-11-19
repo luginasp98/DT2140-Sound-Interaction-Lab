@@ -64,8 +64,8 @@ const scale = (number, [inMin, inMax], [outMin, outMax]) => {
 const angleToPosition = angle => scale(angle, [0, 90], [1, 0.5]);
 
 function rotationChange(rotx, roty, rotz) {
-  const angle = Math.max(0, Math.min(90, roty));   // keep the angle inside 0-90
-    playAudio(angleToPosition(angle));
+  const pos = scale(roty, [0, 90], [1, 0.5]);   // keep the angle inside 0-90
+    playAudio(pos);
    
 }
 
