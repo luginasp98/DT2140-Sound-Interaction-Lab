@@ -54,16 +54,17 @@ marimbaMIDI.createDSP(audioContext, 1024)
 function accelerationChange(accx, accy, accz) {
     // playAudio()
 }
-const scaleValue = (number, inMin, inMax, outMin, outMax) => {
-    // if you need an integer value use Math.floor or Math.ceil here
-    return (number - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
-};
-const angleToPosition = angle => scaleValue(angle, 0, 90, 0, 4);
+const scaleValue = (number, inMin, inMax, outMin, outMax) =>
+  (number - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
 
+//let strikePos = 0;        // 0-4, updated by the tilt angle
+//let lastStrike = 0;       // for the cooldown
+
+// 1. Tilt chooses the strike position
 function rotationChange(rotx, roty, rotz) {
-  const pos = scaleValue(abs(rotx), 0, 90, 0, 4);   // keep the angle inside 0-90
-    playAudio(pos); 
-    //dspNode.setParamValue("/door/door/position", doorposition); 
+  const angle = Math.min(90, Math.abs(rotx));            // Math.abs, not abs
+  strikePos = Math.round(scaleValue(angle, 0, 90, 0, 4)); // strikePosition is an integer
+  //dspNode.setParamValue("/marimba/otherParams/strikePosition", strikePos);
 }
 
 function mousePressed() {
