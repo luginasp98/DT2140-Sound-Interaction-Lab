@@ -54,17 +54,17 @@ marimbaMIDI.createDSP(audioContext, 1024)
 function accelerationChange(accx, accy, accz) {
     // playAudio()
 }
-const scaleValue = (number, inMin, inMax, outMin, outMax) =>
-  (number - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
 
-//let strikePos = 0;        // 0-4, updated by the tilt angle
-//let lastStrike = 0;       // for the cooldown
+let lastHit = 0;
+let wanInRange = false;
 
-// 1. Tilt chooses the strike position
 function rotationChange(rotx, roty, rotz) {
-  const angle = Math.min(90, Math.abs(rotx));            // Math.abs, not abs
-  strikePos = Math.round(scaleValue(angle, 0, 90, 0, 4)); // strikePosition is an integer
-  //dspNode.setParamValue("/marimba/otherParams/strikePosition", strikePos);
+    let inRange = rotx >= 0 && rotx <= 10;
+    if (inrange && !wasInRange && millis() - lastHit > 200) {
+        lastHit = millis();
+        playAudio();
+    }
+    wasInRange = inRange;
 }
 
 function mousePressed() {
@@ -104,15 +104,15 @@ function getMinMaxParam(address) {
 //
 //==========================================================================================
 
-function playAudio(largemovement) {
+function playAudio(pressure) {
     if (!dspNode) {
         return;
     }
     if (audioContext.state === 'suspended') {
         return;
     }
-    console.log(pressure)
-    dspNode.setParamValue("/marimba/otherParams/strikePosition", largemovement)
+    dspNode.setParamValue("/marimba/gate", 1);
+    setTimeout(() => { dspNode.setParamValue("/marimba/gate", 0) }, 100);
 }
 
 //==========================================================================================
