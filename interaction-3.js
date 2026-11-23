@@ -56,7 +56,7 @@ function accelerationChange(accx, accy, accz) {
 }
 
 let lastHit = 0;
-let wanInRange = false;
+let wasInRange = true;
 
 function rotationChange(rotx, roty, rotz) {
     let inRange = rotx >= 0 && rotx <= 10;
